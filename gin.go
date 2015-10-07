@@ -35,7 +35,7 @@ func NewGin(config *Config, args ...string) kargar.Action {
 	return func(ctx context.Context) error {
 		err := config.SetDefaults()
 		if err != nil {
-			ctx.Fatal(err)
+			return err
 		}
 
 		// Set the PORT env
