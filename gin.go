@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/codegangsta/gin/lib"
 	"github.com/go-gonzo/watch"
+	"github.com/omeid/gin/lib"
 	"github.com/omeid/gonzo/context"
 	"github.com/omeid/kargar"
 
@@ -24,6 +24,7 @@ var (
 
 type Config struct {
 	Path      string // cwd.
+	Tags      string //Tags to use for build.
 	Port      int    //Port for the proxy server.    3000
 	App       int    //Port for the Go web server.    3001
 	Bin       string //Name of generated binary file. gin-bin
@@ -41,7 +42,7 @@ func NewGin(config *Config, args ...string) kargar.Action {
 		// Set the PORT env
 		os.Setenv("PORT", strconv.Itoa(config.App))
 
-		builder := gin.NewBuilder(config.Path, config.Bin, false)
+		builder := gin.NewBuilder(config.Path, config.Bin, false, config.Tags)
 		runner := gin.NewRunner(filepath.Join(config.Path, builder.Binary()), args...)
 
 		runner.SetWriter(os.Stdout) //TODO: gonzo.C needs a linelogger.
